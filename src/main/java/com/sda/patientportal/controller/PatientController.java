@@ -5,6 +5,8 @@ import com.sda.patientportal.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/patients")
 public class PatientController {
@@ -16,22 +18,31 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping(value = "/demo")
-    public String demo() {
-        return "hello demo http get";
-
-    }
-
-    @PostMapping(value = "/demo")
-    public String demo1(@RequestBody String message) {
-        return message + "hello demo http post";
-    }
 
     @PostMapping()
     public Patient createPatient(@RequestBody Patient patient) {
-        System.out.println("patient was created");
-        return patient;
-        //return patientService.createPatient(patient);
+        return patientService.createPatient(patient);
 
+    }
+
+    @GetMapping
+    public List<Patient> readPatients() {
+        return patientService.getPatients();
+    }
+
+    @GetMapping(value = "/{id}")
+    public Patient getPatient(@PathVariable Long id) {
+        return patientService.getPatientById(id);
+
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deletePatientById(@PathVariable Long id) {
+        patientService.deletePatient(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public Patient updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+        return patientService.updatePatient(patient);
     }
 }
